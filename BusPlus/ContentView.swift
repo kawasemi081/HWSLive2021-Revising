@@ -51,7 +51,7 @@ struct ContentView: View {
             do {
                 let url = URL(string: "https://hws.dev/bus-timetable")!
                 let (data, _) = try await URLSession.shared.data(from: url)
-                Task.checkCancellation()
+                try Task.checkCancellation()
                 buses = try JSONDecoder().decode([Bus].self, from: data)
             } catch {
                 print(error.localizedDescription)
