@@ -17,28 +17,8 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(buses) { bus in
-                HStack(alignment: .bottom) {
-                    AsyncImage(url: URL(string: bus.image)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Color.mint
-                    }
-                    .frame(width: 110, height: 90)
-                
-                    VStack(alignment: .leading) {
-                        Text(bus.name).font(.headline)
-                        Text("\(bus.location) → \(bus.destination)")
-                        Spacer()
-                        HStack(alignment: .top) {
-                            Image(systemName: "person.2.circle")
-                            Text("\(bus.passengers)").font(.subheadline)
-                            Image(systemName: "fuelpump.circle")
-                            Text("\(bus.fuel)").font(.subheadline)
-                        }
-                    }
-                }
-            }
+            // make more tidy than using List(buses)
+            List(buses, rowContent: BusRow.init)
             .listStyle(.plain)
             .navigationTitle("Bus+")
         }
@@ -57,6 +37,38 @@ struct ContentView: View {
                 print(error.localizedDescription)
             }
         }
+    }
+}
+
+struct BusRow: View {
+    let bus: Bus
+    var body: some View {
+        HStack(alignment: .top, spacing: 16) {
+            AsyncImage(url: URL(string: bus.image)) { image in
+                image.resizable()
+            } placeholder: {
+                Color.mint
+            }
+            .frame(width: 110, height: 90)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text(bus.name).font(.headline)
+                HStack(spacing: 8) {
+                    Image(systemName: "person.2.circle")
+                    Text("\(bus.passengers)")
+                    Image(systemName: "fuelpump.circle")
+                    Text("\(bus.fuel) %")
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(bus.passengers) passengers and \(bus.fuel) per cent fuel.")
+                
+                Text("\(bus.location) → \(bus.destination)")
+                    .font(.subheadline)
+                    .accessibilityLabel("Traveling from \(bus.location) to \(bus.destination)")
+                
+            }
+        }
+
     }
 }
 
