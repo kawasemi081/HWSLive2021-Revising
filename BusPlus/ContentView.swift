@@ -16,6 +16,7 @@ import SwiftUI
 /// * Day3-part2
 /// 1. add a refreshable
 /// 2. add a searchable and suggestions
+/// 3. add a listRowSeparatorTint
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -47,7 +48,7 @@ struct ContentView: View {
         NavigationView {
             // make more tidy than using List(buses)
             List(filteredData, rowContent: BusRow.init)
-            .listStyle(.plain)
+            .listStyle(.grouped)
             .navigationTitle("Bus+")
             .task(loadData)
             .refreshable(action: loadData)
@@ -105,6 +106,8 @@ struct BusRow: View {
                 
             }
         }
+        .listRowSeparator(.hidden, edges: .top)
+        .listRowSeparatorTint(.indigo, edges: .bottom)
     }
 }
 
