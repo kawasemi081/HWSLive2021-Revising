@@ -8,10 +8,13 @@
 import SwiftUI
 
 
-/// - Note: Day2-part4 assignment
+/// - Note: Assignments
+/// * Day2-part4
 /// 1. add bus struct and decoding
 /// 2. use AsyncImage for image
 /// 3.  layout image
+/// * Day3-part2
+/// 1. add the refreshable
 struct ContentView: View {
     @State private var buses = [Bus]()
     
@@ -21,8 +24,9 @@ struct ContentView: View {
             List(buses, rowContent: BusRow.init)
             .listStyle(.plain)
             .navigationTitle("Bus+")
+            .task(loadData)
+            .refreshable(action: loadData)
         }
-        .task(loadData)
         
     }
     
@@ -68,7 +72,6 @@ struct BusRow: View {
                 
             }
         }
-
     }
 }
 
