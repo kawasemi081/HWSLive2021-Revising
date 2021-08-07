@@ -14,18 +14,51 @@ import SwiftUI
 /// 2. use AsyncImage for image
 /// 3.  layout image
 /// * Day3-part2
-/// 1. add the refreshable
+/// 1. add a refreshable
+/// 2. add a searchable and suggestions
 struct ContentView: View {
     @State private var buses = [Bus]()
+    @State private var searchText = ""
+//    @Environment(\.isSearching) var isSearching
+    
+    var filteredData: [Bus] {
+        if searchText.isEmpty {
+            return buses
+        } else {
+            return buses.filter { bus in
+                /// - Note: Mirror is the way to look up meta data for the object. Nomaly, use this for debug
+//                let busMirror = Mirror(reflecting: bus)
+//                var isGood =  false
+//                for child in busMirror.children {
+//                    guard let value = child.value as? String else { continue }
+//
+//                    isGood = value.localizedCaseInsensitiveContains(searchText)
+//                    return isGood
+//                }
+//                return isGood
+                return bus.name.localizedCaseInsensitiveContains(searchText)
+                || bus.destination.localizedCaseInsensitiveContains(searchText)
+                || bus.location.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
             // make more tidy than using List(buses)
-            List(buses, rowContent: BusRow.init)
+            List(filteredData, rowContent: BusRow.init)
             .listStyle(.plain)
             .navigationTitle("Bus+")
             .task(loadData)
             .refreshable(action: loadData)
+            .searchable(text: $searchText.animation(), prompt: "Filtered results")
+//            {
+//                ForEach(filteredData) { bus in
+//                    Label(bus.name, systemImage: "bus")
+//                        .searchCompletion(bus.name)
+//                        .foregroundColor(.mint)
+//                }
+//            }
         }
         
     }
