@@ -23,7 +23,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
-
+    @State private var favorites = Set<Bus>()
+    
     var filteredData: [Bus] {
         if searchText.isEmpty {
             return buses
@@ -38,7 +39,20 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(filteredData, rowContent: BusRow.init)
+            List(filteredData) { bus in
+                BusRow(bus: bus, isFavorite: favorites.contains(bus))
+                    .swipeActions {
+                        Button {
+                            toggle(favorite: bus)
+                        } label: {
+                            if favorites.contains(bus) {
+                                Label("Undo", systemImage: "star.slash")
+                            } else {
+                                Label("Favorite", systemImage: "star.fill")
+                            }
+                        }.tint(.mint)
+                    }
+            }
             .listStyle(.grouped)
             .navigationTitle("Bus+")
             .task(loadData)
@@ -60,11 +74,19 @@ struct ContentView: View {
             }
         }
     }
+    
+    func toggle(favorite bus: Bus) {
+        if favorites.contains(bus) {
+            favorites.remove(bus)
+        } else {
+            favorites.insert(bus)
+        }
+    }
 }
 
 struct BusRow: View {
-    @State private var isFavorite = false
     let bus: Bus
+    let isFavorite: Bool
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
@@ -79,8 +101,7 @@ struct BusRow: View {
                 HStack {
                     Text(bus.name).font(.headline)
                     if isFavorite {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.mint)
+                        Image(systemName: "star.fill").foregroundColor(.mint)
                     }
                 }
                 HStack(spacing: 8) {
@@ -99,31 +120,11 @@ struct BusRow: View {
             }
         }
         .listRowSeparator(.hidden, edges: .top)
-        .listRowSeparatorTint(.mi, edges: .bottom)
-        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            Button {
-                guard !isFavorite else { return }
-                
-                isFavorite.toggle()
-            } label: {
-                Label("Favorite", systemImage: "star.fill")
-            }.tint(.mint)
-        }
-        .swipeActions(edge: .leading) {
-            Button {
-                guard isFavorite else { return }
-                
-                isFavorite.toggle()
-            } label: {
-                Label("Undo", systemImage: "star.slash")
-            }
-
-        }
-        
+        .listRowSeparatorTint(.mint, edges: .bottom)
     }
 }
 
-struct Bus: Decodable, Identifiable {
+struct Bus: Decodable, Identifiable, Hashable {
     let id: Int
     let name: String
     let location: String
