@@ -19,7 +19,7 @@ import SwiftUI
 /// 3. add a listRowSeparatorTint
 /// * Day3-part3
 /// 1. add SwipeAction for "Favorite"
-/// 2.
+/// 2. add markdown on somewhere my own
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -113,7 +113,7 @@ struct BusRow: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("\(bus.passengers) passengers and \(bus.fuel) per cent fuel.")
                 
-                Text("\(bus.location) → \(bus.destination)")
+                Text("*\(bus.location) → \(bus.destination)*")
                     .font(.subheadline)
                     .accessibilityLabel("Traveling from \(bus.location) to \(bus.destination)")
                 
