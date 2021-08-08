@@ -20,6 +20,7 @@ import SwiftUI
 /// * Day3-part3
 /// 1. add SwipeAction for "Favorite"
 /// 2. add markdown on somewhere my own
+/// 3.
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -58,6 +59,13 @@ struct ContentView: View {
             .task(loadData)
             .refreshable(action: loadData)
             .searchable(text: $searchText.animation(), prompt: "Filtered results")
+            {
+                ForEach(filteredData) { bus in
+                    Text("Selected: ***\(bus.name)***")
+                        .searchCompletion(bus.name)
+                        .foregroundColor(.mint)
+                }
+            }
         }
         
     }
