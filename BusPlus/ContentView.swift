@@ -17,26 +17,18 @@ import SwiftUI
 /// 1. add a refreshable
 /// 2. add a searchable and suggestions
 /// 3. add a listRowSeparatorTint
+/// * Day3-part3
+/// 1. add SwipeAction for "Favorite"
+/// 2.
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
-//    @Environment(\.isSearching) var isSearching
-    
+
     var filteredData: [Bus] {
         if searchText.isEmpty {
             return buses
         } else {
             return buses.filter { bus in
-                /// - Note: Mirror is the way to look up meta data for the object. Nomaly, use this for debug
-//                let busMirror = Mirror(reflecting: bus)
-//                var isGood =  false
-//                for child in busMirror.children {
-//                    guard let value = child.value as? String else { continue }
-//
-//                    isGood = value.localizedCaseInsensitiveContains(searchText)
-//                    return isGood
-//                }
-//                return isGood
                 return bus.name.localizedCaseInsensitiveContains(searchText)
                 || bus.destination.localizedCaseInsensitiveContains(searchText)
                 || bus.location.localizedCaseInsensitiveContains(searchText)
@@ -46,20 +38,12 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            // make more tidy than using List(buses)
             List(filteredData, rowContent: BusRow.init)
             .listStyle(.grouped)
             .navigationTitle("Bus+")
             .task(loadData)
             .refreshable(action: loadData)
             .searchable(text: $searchText.animation(), prompt: "Filtered results")
-//            {
-//                ForEach(filteredData) { bus in
-//                    Label(bus.name, systemImage: "bus")
-//                        .searchCompletion(bus.name)
-//                        .foregroundColor(.mint)
-//                }
-//            }
         }
         
     }
@@ -79,7 +63,9 @@ struct ContentView: View {
 }
 
 struct BusRow: View {
+    @State private var isFavorite = false
     let bus: Bus
+    
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             AsyncImage(url: URL(string: bus.image)) { image in
@@ -90,7 +76,13 @@ struct BusRow: View {
             .frame(width: 110, height: 90)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(bus.name).font(.headline)
+                HStack {
+                    Text(bus.name).font(.headline)
+                    if isFavorite {
+                        Image(systemName: "star.fill")
+                            .foregroundColor(.mint)
+                    }
+                }
                 HStack(spacing: 8) {
                     Image(systemName: "person.2.circle")
                     Text("\(bus.passengers)")
@@ -107,7 +99,27 @@ struct BusRow: View {
             }
         }
         .listRowSeparator(.hidden, edges: .top)
-        .listRowSeparatorTint(.indigo, edges: .bottom)
+        .listRowSeparatorTint(.mi, edges: .bottom)
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button {
+                guard !isFavorite else { return }
+                
+                isFavorite.toggle()
+            } label: {
+                Label("Favorite", systemImage: "star.fill")
+            }.tint(.mint)
+        }
+        .swipeActions(edge: .leading) {
+            Button {
+                guard isFavorite else { return }
+                
+                isFavorite.toggle()
+            } label: {
+                Label("Undo", systemImage: "star.slash")
+            }
+
+        }
+        
     }
 }
 
