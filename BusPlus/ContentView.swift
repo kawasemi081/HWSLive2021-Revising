@@ -113,11 +113,12 @@ struct BusRow: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(systemName: "bus")
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.indigo, Color("palepink"))
+                        .foregroundStyle(LinearGradient(colors: [Color("palepink"), .indigo], startPoint: .topLeading, endPoint: .bottomTrailing))
                     Text(bus.name).font(.headline)
                     if isFavorite {
-                        Image(systemName: "star.fill").foregroundColor(.mint)
+                        Image(systemName: "star.fill")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(Color("lemon"))
                     }
                 }
                 HStack(spacing: 8) {
@@ -134,15 +135,14 @@ struct BusRow: View {
                 .accessibilityLabel("\(bus.passengers) passengers and \(bus.fuel) per cent fuel.")
                 HStack(spacing: 2) {
                     Image(systemName: "arrow.triangle.turn.up.right.circle")
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.indigo, Color("palepink"))
+                        .foregroundStyle(LinearGradient(colors: [Color("palepink"), .indigo], startPoint: .top, endPoint: .bottom))
                     Text("*\(bus.destination)*").font(.subheadline) + Text(" from *\(bus.location)*").font(.caption)
                         .accessibilityLabel("Traveling from \(bus.location) to \(bus.destination)")
                 }
             }
         }
         .listRowSeparator(.hidden, edges: .top)
-        .listRowSeparatorTint(.mint, edges: .bottom)
+        .listRowSeparatorTint(.indigo, edges: .bottom)
     }
 }
 
