@@ -20,7 +20,7 @@ import SwiftUI
 /// * Day3-part3
 /// 1. add SwipeAction for "Favorite"
 /// 2. add markdown on somewhere my own
-/// 3.
+/// 3. give some colored icon with palette option
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -49,7 +49,7 @@ struct ContentView: View {
                             if favorites.contains(bus) {
                                 Label("Undo", systemImage: "star.slash")
                             } else {
-                                Label("Favorite", systemImage: "star.fill")
+                                Label("Favorite", systemImage: "star")
                             }
                         }.tint(.mint)
                     }
@@ -61,9 +61,14 @@ struct ContentView: View {
             .searchable(text: $searchText.animation(), prompt: "Filtered results")
             {
                 ForEach(filteredData) { bus in
-                    Text("Selected: ***\(bus.name)***")
-                        .searchCompletion(bus.name)
-                        .foregroundColor(.mint)
+                    HStack {
+                        Image(systemName: "location.fill.viewfinder")
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.indigo, Color("palepink"))
+                        Text("***\(bus.name)***")
+                            .searchCompletion(bus.name)
+                            .foregroundColor(.mint)
+                    }
                 }
             }
         }
@@ -107,6 +112,9 @@ struct BusRow: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
+                    Image(systemName: "bus")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.indigo, Color("palepink"))
                     Text(bus.name).font(.headline)
                     if isFavorite {
                         Image(systemName: "star.fill").foregroundColor(.mint)
@@ -114,17 +122,23 @@ struct BusRow: View {
                 }
                 HStack(spacing: 8) {
                     Image(systemName: "person.2.circle")
-                    Text("\(bus.passengers)")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.indigo, Color("palepink"))
+                    Text("**\(bus.passengers)** passengers").font(.caption)
                     Image(systemName: "fuelpump.circle")
-                    Text("\(bus.fuel) %")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.indigo, Color("palepink"))
+                    Text("**\(bus.fuel)** %").font(.caption)
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("\(bus.passengers) passengers and \(bus.fuel) per cent fuel.")
-                
-                Text("*\(bus.location) → \(bus.destination)*")
-                    .font(.subheadline)
-                    .accessibilityLabel("Traveling from \(bus.location) to \(bus.destination)")
-                
+                HStack(spacing: 2) {
+                    Image(systemName: "arrow.triangle.turn.up.right.circle")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.indigo, Color("palepink"))
+                    Text("*\(bus.destination)*").font(.subheadline) + Text(" from *\(bus.location)*").font(.caption)
+                        .accessibilityLabel("Traveling from \(bus.location) to \(bus.destination)")
+                }
             }
         }
         .listRowSeparator(.hidden, edges: .top)
