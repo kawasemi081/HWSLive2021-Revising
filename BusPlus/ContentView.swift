@@ -21,6 +21,7 @@ import SwiftUI
 /// 1. add SwipeAction for "Favorite"
 /// 2. add markdown on somewhere my own
 /// 3. give some colored icon with palette option
+/// 4. wrap  current content in Tab view, the second tab has enter the name and enter  ticket number keyboard 
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -51,7 +52,7 @@ struct ContentView: View {
                             } else {
                                 Label("Favorite", systemImage: "star")
                             }
-                        }.tint(.mint)
+                        }.tint(Color("lemon"))
                     }
             }
             .listStyle(.grouped)

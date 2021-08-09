@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A41860526C0F12700788509 /* FormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A41860426C0F12700788509 /* FormView.swift */; };
 		1A51C3E526BBEBEB0000D3BC /* BusPlusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A51C3E426BBEBEB0000D3BC /* BusPlusApp.swift */; };
 		1A51C3E726BBEBEB0000D3BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A51C3E626BBEBEB0000D3BC /* ContentView.swift */; };
 		1A51C3E926BBEBEB0000D3BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A51C3E826BBEBEB0000D3BC /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A41860426C0F12700788509 /* FormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormView.swift; sourceTree = "<group>"; };
 		1A51C3E126BBEBEB0000D3BC /* BusPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BusPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A51C3E426BBEBEB0000D3BC /* BusPlusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPlusApp.swift; sourceTree = "<group>"; };
 		1A51C3E626BBEBEB0000D3BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,6 +57,7 @@
 				1A51C3E626BBEBEB0000D3BC /* ContentView.swift */,
 				1A51C3E826BBEBEB0000D3BC /* Assets.xcassets */,
 				1A51C3EA26BBEBEB0000D3BC /* Preview Content */,
+				1A41860426C0F12700788509 /* FormView.swift */,
 			);
 			path = BusPlus;
 			sourceTree = "<group>";
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A41860526C0F12700788509 /* FormView.swift in Sources */,
 				1A51C3E726BBEBEB0000D3BC /* ContentView.swift in Sources */,
 				1A51C3E526BBEBEB0000D3BC /* BusPlusApp.swift in Sources */,
 			);

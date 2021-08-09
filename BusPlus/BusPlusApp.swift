@@ -11,7 +11,19 @@ import SwiftUI
 struct BusPlusApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+
+            TabView {
+                ContentView().tabItem {
+                    Image(systemName: "bus")
+                    Text("bus")
+                }
+                FormView().tabItem {
+                    Image(systemName: "ticket").tint(.indigo)
+                    Text("ticket")
+                }
+            }
+            .accentColor(.indigo)
         }
+
     }
 }
