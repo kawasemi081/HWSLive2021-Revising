@@ -28,6 +28,7 @@ import CoreImage.CIFilterBuiltins
 /// 1. add Done buttton on keyboard toolbar area
 /// 2. add "!" badges over MyTicket View if textfields have not been filled yet.
 /// 3. add visual effect when user tap the list item
+/// 4. add some attribute strings
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -211,15 +212,24 @@ struct MyTicketView: View {
         return Image(systemName: "xmark.circle")
     }
     
+    var timestampString: AttributedString {
+        var timestamp = AttributedString(Date.now.formatted(.iso8601))
+        timestamp.foregroundColor = .mint
+        timestamp.font = .caption.bold()
+        return timestamp
+    }
+    
     var body: some View {
         NavigationView {
             /// - Note: Form does't work with focus status.
             VStack {
+                
                 TextField("Jonny Appleseed", text: $userData.name)
                     .focused($focusedField, equals: .name)
                     .textContentType(.name)
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.next)
+                    .font(.title3.bold())
                 
                 TextField("Ticket reference number", text: $userData.reference)
                     .focused($focusedField, equals: .reference)
@@ -230,6 +240,7 @@ struct MyTicketView: View {
                     .interpolation(.none)
                     .resizable()
                     .frame(width: 250, height: 250)
+                Text(timestampString)
                 Spacer()
             }
             .toolbar {
@@ -250,6 +261,7 @@ struct MyTicketView: View {
                     focusedField = nil
                 }
             }
+            .navigationTitle("My Ticket Reference")
         }
     }
 }
