@@ -27,10 +27,12 @@ import CoreImage.CIFilterBuiltins
 /// * Day3-part4
 /// 1. add Done buttton on keyboard toolbar area
 /// 2. add "!" badges over MyTicket View if textfields have not been filled yet.
+/// 3. add visual effect when user tap the list item
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
     @State private var favorites = Set<Bus>()
+    @State private var selectedBus: Bus?
     
     var filteredData: [Bus] {
         if searchText.isEmpty {
@@ -46,19 +48,41 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(filteredData) { bus in
-                BusRow(bus: bus, isFavorite: favorites.contains(bus))
-                    .swipeActions {
-                        Button {
-                            toggle(favorite: bus)
-                        } label: {
-                            if favorites.contains(bus) {
-                                Label("Undo", systemImage: "star.slash")
-                            } else {
-                                Label("Favorite", systemImage: "star")
+            ZStack {
+                List(filteredData) { bus in
+                    BusRow(bus: bus, isFavorite: favorites.contains(bus))
+                        .swipeActions {
+                            Button {
+                                toggle(favorite: bus)
+                            } label: {
+                                if favorites.contains(bus) {
+                                    Label("Undo", systemImage: "star.slash")
+                                } else {
+                                    Label("Favorite", systemImage: "star")
+                                }
                             }
-                        }.tint(Color("lemon"))
+                            .tint(Color("lemon"))
+                        }
+                        .onTapGesture {
+                            self.selectedBus = bus
+                        }
+                }
+                if let selectedBus = selectedBus {
+                    AsyncImage(url: URL(string: selectedBus.image)) { image in
+                        image
+                            .resizable()
+                            .cornerRadius(10)
+                    } placeholder: {
+                        Image(systemName: "bus")
                     }
+                    .frame(width: 275, height: 275)
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(20)
+                    .onTapGesture {
+                        self.selectedBus = nil
+                    }
+                }
             }
             .listStyle(.grouped)
             .navigationTitle("Bus+")
