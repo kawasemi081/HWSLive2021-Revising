@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreImage.CIFilterBuiltins
 
 
 /// - Note: Assignments
@@ -21,7 +22,8 @@ import SwiftUI
 /// 1. add SwipeAction for "Favorite"
 /// 2. add markdown on somewhere my own
 /// 3. give some colored icon with palette option
-/// 4. wrap  current content in Tab view, the second tab has enter the name and enter  ticket number keyboard 
+/// 4. wrap  current content in Tab view, the second tab has enter the name and enter  ticket reference number textfields
+/// 5. add second content here and add QRCode
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -155,6 +157,66 @@ struct Bus: Decodable, Identifiable, Hashable {
     let passengers: Int
     let fuel: Int
     let image: String
+}
+
+struct MyTicketView: View {
+    enum Field {
+        case name
+        case reference
+    }
+    
+    @State private var name = ""
+    @State private var reference = ""
+    @FocusState private var focusedField: Field?
+    
+    @State private var context = CIContext()
+    @State private var filter = CIFilter.qrCodeGenerator()
+    
+    var qrCode: Image {
+        let id = name + reference
+        let data = Data(id.utf8)
+        filter.setValue(data, forKey: "inputMessage")
+        
+        if let outputImage = filter.outputImage {
+            if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
+                let uiimg = UIImage(cgImage: cgimg)
+                return Image(uiImage: uiimg)
+            }
+        }
+        return Image(systemName: "xmark.circle")
+    }
+    
+    var body: some View {
+        NavigationView {
+            /// - Note: Form does't work with focus status.
+            VStack {
+                TextField("Jonny Appleseed", text: $name)
+                    .focused($focusedField, equals: .name)
+                    .textContentType(.name)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.next)
+                TextField("Ticket reference number", text: $reference)
+                    .focused($focusedField, equals: .reference)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
+                    .submitLabel(.done)
+                qrCode
+                    .interpolation(.none)
+                    .resizable()
+                    .frame(width: 250, height: 250)
+                Spacer()
+            }
+            .onSubmit {
+                switch focusedField {
+                case .name:
+                    focusedField = .reference
+                default:
+                    focusedField = nil
+                }
+            }
+            
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

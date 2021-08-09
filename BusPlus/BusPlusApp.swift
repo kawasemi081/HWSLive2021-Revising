@@ -14,12 +14,10 @@ struct BusPlusApp: App {
 
             TabView {
                 ContentView().tabItem {
-                    Image(systemName: "bus")
-                    Text("bus")
+                    Label("bus", systemImage: "bus")
                 }
-                FormView().tabItem {
-                    Image(systemName: "ticket").tint(.indigo)
-                    Text("ticket")
+                MyTicketView().tabItem {
+                    Label("My Ticket", systemImage: "qrcode")
                 }
             }
             .accentColor(.indigo)
