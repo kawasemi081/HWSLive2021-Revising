@@ -23,7 +23,10 @@ import CoreImage.CIFilterBuiltins
 /// 2. add markdown on somewhere my own
 /// 3. give some colored icon with palette option
 /// 4. wrap  current content in Tab view, the second tab has enter the name and enter  ticket reference number textfields
-/// 5. add second content here and add QRCode
+/// 5. add second content here and
+/// * Day3-part4
+/// 1. add Done buttton on keyboard toolbar area
+/// 2. add badges on the tabItem or List
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -195,16 +198,27 @@ struct MyTicketView: View {
                     .textContentType(.name)
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.next)
+
                 TextField("Ticket reference number", text: $reference)
                     .focused($focusedField, equals: .reference)
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
-                    .submitLabel(.done)
-                qrCode
+                
+                    qrCode
                     .interpolation(.none)
                     .resizable()
                     .frame(width: 250, height: 250)
                 Spacer()
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+
+                    Button("Done") {
+                        focusedField = nil
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
             }
             .onSubmit {
                 switch focusedField {
