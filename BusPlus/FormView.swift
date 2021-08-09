@@ -58,3 +58,13 @@ struct FormView_Previews: PreviewProvider {
         FormView()
     }
 }
+
+@MainActor
+class UserData: ObservableObject {
+    @Published var name = ""
+    @Published var reference = ""
+    
+    var identifier: String {
+        name + reference
+    }
+}

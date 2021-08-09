@@ -26,7 +26,7 @@ import CoreImage.CIFilterBuiltins
 /// 5. add second content here and
 /// * Day3-part4
 /// 1. add Done buttton on keyboard toolbar area
-/// 2. add badges on the tabItem or List
+/// 2. add "!" badges over MyTicket View if textfields have not been filled yet.
 struct ContentView: View {
     @State private var buses = [Bus]()
     @State private var searchText = ""
@@ -168,16 +168,14 @@ struct MyTicketView: View {
         case reference
     }
     
-    @State private var name = ""
-    @State private var reference = ""
+    @EnvironmentObject var userData: UserData
     @FocusState private var focusedField: Field?
     
     @State private var context = CIContext()
     @State private var filter = CIFilter.qrCodeGenerator()
     
     var qrCode: Image {
-        let id = name + reference
-        let data = Data(id.utf8)
+        let data = Data(userData.identifier.utf8)
         filter.setValue(data, forKey: "inputMessage")
         
         if let outputImage = filter.outputImage {
@@ -193,18 +191,18 @@ struct MyTicketView: View {
         NavigationView {
             /// - Note: Form does't work with focus status.
             VStack {
-                TextField("Jonny Appleseed", text: $name)
+                TextField("Jonny Appleseed", text: $userData.name)
                     .focused($focusedField, equals: .name)
                     .textContentType(.name)
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.next)
-
-                TextField("Ticket reference number", text: $reference)
+                
+                TextField("Ticket reference number", text: $userData.reference)
                     .focused($focusedField, equals: .reference)
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
                 
-                    qrCode
+                qrCode
                     .interpolation(.none)
                     .resizable()
                     .frame(width: 250, height: 250)
@@ -228,7 +226,6 @@ struct MyTicketView: View {
                     focusedField = nil
                 }
             }
-            
         }
     }
 }

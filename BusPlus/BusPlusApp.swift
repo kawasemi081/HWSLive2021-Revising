@@ -9,6 +9,9 @@ import SwiftUI
 
 @main
 struct BusPlusApp: App {
+    @StateObject private var userData = UserData()
+    
+    var  isDisplay = true
     var body: some Scene {
         WindowGroup {
 
@@ -19,7 +22,9 @@ struct BusPlusApp: App {
                 MyTicketView().tabItem {
                     Label("My Ticket", systemImage: "qrcode")
                 }
+                .badge(userData.identifier.isEmpty ? "!" : nil)
             }
+            .environmentObject(userData)
             .accentColor(.indigo)
         }
 
